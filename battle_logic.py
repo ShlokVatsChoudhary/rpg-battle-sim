@@ -1,6 +1,5 @@
 #battle logic
 import random
-import characters
 
 
 class Battle:
@@ -42,7 +41,7 @@ class Battle:
 
 
 
-    def player_chance(self):
+    def player_turn(self):
         while (True):
             print("CHOOSE YOUR ACTION: ",
                   "1. Normal attack",
@@ -76,7 +75,47 @@ class Battle:
 
     # Enemy's turn (simple probabilistic AI)
 
-    def enemy_turn(self, enemy):
-        
+    def enemy_turn(self):
+        if hasattr(self.enemy, "mana") and hasattr(self.enemy, "mana_max"):
+            if self.enemy.mana < self.enemy.mana_max:
+
+                if random.random() < 0.35:
+                    self.enemy.regeneration_special(self.enemy, skipped_turn = True)
+                    return
+            if self.enemy.mana == self.enemy.mana_max:
+
+                if random.random() < 0.50:
+                    print(f"The {self.enemy} has chosen to SKIP")
+                    self.enemy.special_power(self.player)
+                    self.regeneration_special(self.enemy, skipped_turn = False)
+                    return
+                
+        else: # default attack
+            self.enemy.normal_attack(self.player)
+            self.enemy.regeneration_special(self.enemy, skipped_turn = False)
+
+    def run(self):
+        print("⚔️--BATTLE BEGINS--⚔️")
+        while self.player.is_alive() and self.enemy.is_alive():
+            self.show_status()
+
+            self.player_turn()
+            if not self.enemy.is_alive():
+                print(f"\n{self.enemy.name} is defeated! YOU WON!⚔️")
+                return self.player
+
+            self.enemy_turn()
+            if not self.player.is_alive():
+                print(f"\n{self.enemy.name} won! YOU DIED!☠️")
+                return self.enemy
+
+            self.turn += 1 
+
+
+
+                
+            
+
+            
 
 
