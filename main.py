@@ -3,7 +3,7 @@ from battle_logic import Battle
 import random,time
 
 
-while(True):
+while True:
     print("*"*15 + " ⚔️ RPG BATTLE SIMULATOR ⚔️ " + "*"*15, end = "\n\n")
     print("Welcome hero...")
     print("please select a hero to begin the battle")
@@ -12,36 +12,36 @@ while(True):
               }
     
     for key,hero in heroes.items():
-        print(f"{key} : {hero}")
+        print(f"{key} : {hero.__name__}")
     time.sleep(1)
 
-    while(True):
+    while True:
         try: 
             choice_hero = int(input("select 1/2 --> ").strip())
 
-            if choice_hero not in (1,2):
+            if choice_hero not in heroes:
                 print("invalid...")
                 continue
 
-            else:
-                print(f"The Hero selected is \n ⚜️  {heroes[choice_hero]} ⚜️")
-                break
+            
+            print(f"The Hero selected is \n ⚜️  {heroes[choice_hero].__name__} ⚜️")
+            break
 
-        except ValueError: 
+        except ValueError:
             print("please select from only (1 or 2): ")
 
-    villians = {1: Goblin,
+    villains = {1: Goblin,
                 2: Golem
               }
     
     choice_villain = random.choice((1,2))
 
-    print("The villian is :", end = " ")
+    print("The villain is :", end = " ")
     time.sleep(1)
-    print(villians[choice_villain].__name__ + " ☠️")
+    print(villains[choice_villain].__name__ + " ☠️")
 
     player = heroes[choice_hero]()
-    enemy = choice_villain(f"{villians.get(choice_villain)}")
+    enemy = villains[choice_villain]()
 
     battle = Battle(player,enemy)
 
@@ -49,12 +49,7 @@ while(True):
 
     again_play = input("Do you wish to play again? (y/n)").strip().lower()
 
-    if again_play != "y" or again_play != "yes":
-        print("THX for playing") 
+    if again_play not in ("y", "yes"):
+        print("THX for playing")
         break
     else: continue
-
-    
-
-
-

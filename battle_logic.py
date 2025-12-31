@@ -1,5 +1,5 @@
 #battle logic
-import random
+import random, time
 
 
 class Battle:
@@ -10,7 +10,7 @@ class Battle:
 
         # self status, indicates the current stats of the player and the villian at every turn
 
-    def self_status(self):
+    def show_status(self):
         print("\n" + "=" * 50)
         print(f"TURN {self.turn}")
 
@@ -48,14 +48,16 @@ class Battle:
                   "2. Special ability",
                   "3. Skip turn")
             
-            choice = input("Enter 1/2/3: ")
+            try:
+                choice = int(input("Enter 1/2/3: ").strip())
+                time.sleep(1)
 
-            if choice not in ("1", "2", "3"):
-                print("ERROR!\nSelect from options 1/2/3!\n")
-                continue
+                if choice not in ("1", "2", "3"):
+                    print("ERROR!\nSelect from options 1/2/3!\n")
+                    continue
 
-            else:
-                match (choice):
+            
+                match choice:
                     case 1:
                         self.player.attack_target(self.enemy)
                         self.player.regeneration_special(self.player, skipped_turn = False)
@@ -71,6 +73,8 @@ class Battle:
                     case 3:
                         print(f"{self.player} has skipped the turn for +15 MANA...")
                         self.player.regeneration_special(self.player, skipped_turn = True)
+                
+            except ValueError: print("select from option 1/2/3")
 
 
     # Enemy's turn (simple probabilistic AI)
@@ -95,6 +99,7 @@ class Battle:
             self.enemy.regeneration_special(self.enemy, skipped_turn = False)
 
     def run(self):
+        time.sleep(1)
         print("⚔️--BATTLE BEGINS--⚔️")
         while self.player.is_alive() and self.enemy.is_alive():
             self.show_status()
@@ -110,12 +115,3 @@ class Battle:
                 return self.enemy
 
             self.turn += 1 
-
-
-
-                
-            
-
-            
-
-

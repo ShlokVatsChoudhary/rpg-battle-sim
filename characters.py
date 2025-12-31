@@ -45,7 +45,7 @@ class Goblin(Character):
         print(f"Goblin uses STEAL for {dmg} damage and heals to {self.hp}/{self.max_hp} HP!")
 
 class Golem(Character):
-    def __init__(self,name):
+    def __init__(self,name = "Golem"):
         super().__init__(name, attack = 5, hp = 150 ,defense = 20)
 
     def special_power(self, target):
