@@ -1,3 +1,4 @@
+# characters
 from abc import ABC, abstractmethod
 
 class Character(ABC):
@@ -11,15 +12,34 @@ class Character(ABC):
     def is_alive(self):
         return self.hp > 0
 
-    def attack_target(self, target):
-        dmg = target.take_damage(self.attack)
-        print(f"{self.name} attacks {target.name} for {dmg} damage.")
-
     def take_damage(self, dmg):
         damage_actual = max(0, dmg - self.defense)
         self.hp = max(0, self.hp - damage_actual)
         print(f"{self.name} took {damage_actual} damage (HP: {self.hp}/{self.max_hp})")
         return damage_actual
+    
+    def attack_target(self, target):
+        dmg = target.take_damage(self.attack)
+        print(f"{self.name} attacks {target.name} for {dmg} damage.")
+
+    # mana system 
+    
+    def is_mana_user(self):
+        return hasattr(self, "mana") and hasattr(self, "mana_max")
+    
+    def can_use_special(self):
+        if not self.is_mana_user:
+            return True
+        return self.mana == self.mana_max
+        
+    def regen_mana(self, skipped_turn: bool):
+        if not self.is_mana_user:
+            return
+        
+        gain = 15 if skipped_turn else 5
+        self.mana = min(self.mana_max, self.mana + gain)
+
+# ---------------------------------------------------------------
 
     @abstractmethod
     def special_power(self, target):
@@ -75,5 +95,3 @@ class Mage(Character):
     
         if (self.mana == self.mana_max):
             print("Mana has been restored, special attack can be used now!")
-
-

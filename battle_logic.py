@@ -52,11 +52,10 @@ class Battle:
                 choice = int(input("Enter 1/2/3: ").strip())
                 time.sleep(1)
 
-                if choice not in ("1", "2", "3"):
+                if choice not in (1,2,3):
                     print("ERROR!\nSelect from options 1/2/3!\n")
                     continue
 
-            
                 match choice:
                     case 1:
                         self.player.attack_target(self.enemy)
@@ -73,6 +72,7 @@ class Battle:
                     case 3:
                         print(f"{self.player} has skipped the turn for +15 MANA...")
                         self.player.regeneration_special(self.player, skipped_turn = True)
+                break
                 
             except ValueError: print("select from option 1/2/3")
 
@@ -85,13 +85,16 @@ class Battle:
 
                 if random.random() < 0.35:
                     self.enemy.regeneration_special(self.enemy, skipped_turn = True)
+                    print(f"The {self.enemy} has chosen to SKIP")
                     return
+                
             if self.enemy.mana == self.enemy.mana_max:
 
                 if random.random() < 0.50:
-                    print(f"The {self.enemy} has chosen to SKIP")
+                    
                     self.enemy.special_power(self.player)
                     self.regeneration_special(self.enemy, skipped_turn = False)
+                    print(f"The {self.enemy} has used {self.special_power.__name__}")
                     return
                 
         else: # default attack
@@ -110,6 +113,7 @@ class Battle:
                 return self.player
 
             self.enemy_turn()
+
             if not self.player.is_alive():
                 print(f"\n{self.enemy.name} won! YOU DIED!☠️")
                 return self.enemy
